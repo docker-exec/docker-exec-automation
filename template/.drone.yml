@@ -1,0 +1,3 @@
+image: jpetazzo/dind
+script:
+  - image-common/dexec-drone-test-image.sh {{image-name}} 5
