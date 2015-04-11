@@ -64,16 +64,17 @@ function op_upreadme() {
         if grep -qEe "/tmp/dexec/image-common/dexec-script.sh" "${target}/Dockerfile"; then
             sed -E \
                 -e "s/{{image-name}}/${target}/g" \
-                -e "s/{{image-full-name}}/$(lookup_full_name ${target})/g" \
-                -e "s/{{file-extension}}/$(lookup_extension ${target})/g" \
+                -e "s/{{image-full-name}}/$(lookup_full_name "s")/g" \
+                -e "s/{{file-extension}}/$(lookup_extension "${target}")/g" \
                 -e '/{{start-compiled-only}}/,/{{end-compiled-only}}/d' \
                 <"${script_path}/template/README.${target_type}.md" \
                 >"${target}/README.md"
         else
             sed -E \
                 -e "s/{{image-name}}/${target}/g" \
-                -e "s/{{image-full-name}}/$(lookup_full_name ${target})/g" \
-                -e "s/{{file-extension}}/$(lookup_extension ${target})/g" \
+                -e "s/{{image-full-name}}/$(lookup_full_name "${target}")/g" \
+                -e "s/{{file-extension}}/$(lookup_extension "${target}")/g" \
+                -e "s/{{image-types}}/$(lookup_image_types "${target}")/g" \
                 -e '/{{start-compiled-only}}/d' \
                 -e '/{{end-compiled-only}}/d' \
                 <"${script_path}/template/README.${target_type}.md" \
