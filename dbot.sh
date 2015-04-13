@@ -1,7 +1,7 @@
 #!/bin/bash
 
-script_name=$(basename ${0}); pushd $(dirname ${0}) >/dev/null
-script_path=$(pwd -P); popd >/dev/null
+script_name="$(basename "${0}")"; pushd "$(dirname "${0}")" >/dev/null; export script_name
+script_path=$(pwd -P); popd >/dev/null; export script_path
 
 . script/util-helper.sh
 . script/util-web.sh
@@ -10,7 +10,7 @@ script_path=$(pwd -P); popd >/dev/null
 . script/ops-text.sh
 . script/ops-git.sh
 
-while getopts ":t:o:g:" o; do
+while getopts ":t:o:g:i:" o; do
     case "${o}" in
         g)
             arg_global_op=${OPTARG}
@@ -23,6 +23,9 @@ while getopts ":t:o:g:" o; do
         o)
             arg_op=${OPTARG}
             $(array_contains "${arg_op}" "${ops[@]}") || usage
+            ;;
+        i)
+            arg_image=${OPTARG}
             ;;
         *)
             usage
@@ -37,7 +40,9 @@ elif [ ! -z "${arg_global_op}" ] && [ ! -z "${arg_target_type}" ]; then
     usage
 elif [ ! -z "${arg_global_op}" ] && [ ! -z "${arg_op}" ]; then
     usage
-elif [ ! -z "${arg_op}" ] && [ ! ${arg_target_type} ]; then
+elif [ ! -z "${arg_op}" ] && [ ! -z "${arg_image}" ]; then
+    usage
+elif [ ! -z "${arg_op}" ] && [ ! -z "${arg_target_type}" ]; then
     usage
 fi
 

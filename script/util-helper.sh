@@ -77,6 +77,7 @@ function usage() {
     echo "    $0 -g <global operation>" >&2
     echo >&2
     echo "Options:" >&2
+    echo "    -i <image>" >&2
     echo "    -t $(concatenate_array '|' "${dir_types[@]}")" >&2
     echo "    -o $(concatenate_array '|' "${ops[@]}")" >&2
     echo "    -g $(concatenate_array '|' "${global_ops[@]}")" >&2
