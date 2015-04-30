@@ -14,15 +14,15 @@ while getopts ":t:o:g:i:" o; do
     case "${o}" in
         g)
             arg_global_op=${OPTARG}
-            $(array_contains "${arg_global_op}" "${global_ops[@]}") || usage
+            array_contains "${arg_global_op}" "${global_ops[@]}" || usage
             ;;
         t)
             arg_target_type=${OPTARG}
-            $(array_contains "${arg_target_type}" "${dir_types[@]}") || usage
+            array_contains "${arg_target_type}" "${dir_types[@]}" || usage
             ;;
         o)
             arg_op=${OPTARG}
-            $(array_contains "${arg_op}" "${ops[@]}") || usage
+            array_contains "${arg_op}" "${ops[@]}" || usage
             ;;
         i)
             arg_image=${OPTARG}
@@ -41,8 +41,6 @@ elif [ ! -z "${arg_global_op}" ] && [ ! -z "${arg_target_type}" ]; then
 elif [ ! -z "${arg_global_op}" ] && [ ! -z "${arg_op}" ]; then
     usage
 elif [ ! -z "${arg_op}" ] && [ ! -z "${arg_image}" ]; then
-    usage
-elif [ ! -z "${arg_op}" ] && [ ! -z "${arg_target_type}" ]; then
     usage
 fi
 
