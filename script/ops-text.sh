@@ -1,3 +1,31 @@
+#!/bin/bash
+
+function op_add_unicode_test() {
+    local target_type="${1}"
+    local target="${2}"
+
+    if [ "${target_type}" != "dexec" ]; then
+        echo "Unable to add unicode tests - use '-t dexec'"
+        return 1
+    else
+        if [ ! -d "${target}" ]; then
+            op_get "${target_type}" "${target}"
+        fi
+
+        local hw_relative_name
+        hw_relative_name=$(find "${target}/test" -iname "helloworld.*")
+
+        local hw_extension
+        hw_extension=$(sed -Ee 's?.*/(.*)\.(.*)?\2?' <<<"${hw_relative_name}")
+
+
+        sed -Ee 's/hello world/hello unicode 👾/g' \
+            <"${hw_relative_name}" \
+            >"${target}/test/unicode.${hw_extension}"
+
+    fi
+}
+
 function op_printwd() {
     local target_type="${1}"
     local target="${2}"

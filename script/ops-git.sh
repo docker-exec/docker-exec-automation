@@ -14,6 +14,14 @@ function op_rewrite() {
     git -C "${target}" tag -d tmp
 }
 
+function op_commit_push() {
+    local target_type="${1}"
+    local target="${2}"
+    git -C "${target}" .
+    git -C "${target}" commit -m "Update"
+    git -C "${target}" push
+}
+
 function op_fpush() {
     local target_type="${1}"
     local target="${2}"
