@@ -17,7 +17,7 @@ function op_rewrite() {
 function op_commit_push() {
     local target_type="${1}"
     local target="${2}"
-    git -C "${target}" .
+    git -C "${target}" add .
     git -C "${target}" commit -m "Update"
     git -C "${target}" push
 }
@@ -26,6 +26,12 @@ function op_fpush() {
     local target_type="${1}"
     local target="${2}"
     git -C "${target}" push --force
+}
+
+function op_push_tags() {
+    local target_type="${1}"
+    local target="${2}"
+    git -C "${target}" push --tags
 }
 
 function op_clean() {
@@ -40,6 +46,33 @@ function op_fmodule() {
     op_remodule "${target_type}" "${target}"
     op_rewrite "${target_type}" "${target}"
     op_fpush "${target_type}" "${target}"
+}
+
+function op_bump_tag() {
+    local target_type="${1}"
+    local target="${2}"
+    local tag_version
+    tag_version="$(get_prop "dexec-${target_type}-tag-version")"
+    if [ -d "${target}" ] && [ -d "${target}/.git" ]; then
+        local current_major_minor
+        current_major_minor=$(git -C "${target}" tag -l \
+            | sort \
+            | tail -1 \
+            | sed -Ee 's/(v[[:digit:]]+\.[[:digit:]]+\.)[[:digit:]]+/\1/')
+
+        local current_patch
+        current_patch=$(git -C "${target}" tag -l \
+            | sort \
+            | tail -1 \
+            | sed -Ee 's/v[[:digit:]]+\.[[:digit:]]+\.([[:digit:]]+)/\1/')
+        local next_patch
+        next_patch=$(($current_patch+1))
+        local tag_version
+        tag_version="${current_major_minor}${next_patch}"
+        echo "tagging ${target} with version ${tag_version}"
+        #git -C "${target}" tag "${tag_version}"
+    fi
+
 }
 
 function op_tag() {

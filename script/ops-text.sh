@@ -1,5 +1,45 @@
 #!/bin/bash
 
+function op_build() {
+    local target_type="${1}"
+    local target="${2}"
+
+    if [ "${target_type}" != "base" ]; then
+        echo "Unable to build - use '-t base'"
+        return 1
+    else
+        if [ ! -d "${target}" ]; then
+            op_get "${target_type}" "${target}"
+        fi
+        pushd "${target}" >/dev/null
+        docker build -t dexec/${target} .
+        popd >/dev/null
+    fi
+}
+
+function op_add_unicode_support() {
+    local target_type="${1}"
+    local target="${2}"
+
+    if [ "${target_type}" != "dexec" ] && [ "${target_type}" != "base" ]; then
+        echo "Unable to add unicode support - use '-t dexec' or '-t base'"
+        return 1
+    else
+        if [ ! -d "${target}" ]; then
+            op_get "${target_type}" "${target}"
+        fi
+        pushd "${target}" >/dev/null
+
+        if ! grep -Fq "dexec/base" Dockerfile; then
+            head -2 Dockerfile > Dockerfile_tmp
+            echo "ENV         LANG C.UTF-8" >> Dockerfile_tmp
+            tail -$(($(wc -l <Dockerfile)-2)) Dockerfile >> Dockerfile_tmp
+            mv Dockerfile_tmp Dockerfile
+        fi
+        popd >/dev/null
+    fi
+}
+
 function op_add_unicode_test() {
     local target_type="${1}"
     local target="${2}"
