@@ -70,7 +70,7 @@ function op_bump_tag() {
         local tag_version
         tag_version="${current_major_minor}${next_patch}"
         echo "tagging ${target} with version ${tag_version}"
-        #git -C "${target}" tag "${tag_version}"
+        git -C "${target}" tag "${tag_version}"
     fi
 
 }
