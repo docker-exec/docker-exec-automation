@@ -6,7 +6,7 @@ A Dockerfile describing an container capable of executing {{image-full-name}} so
 
 ```sh
 git clone https://github.com/docker-exec/{{image-name}}.git
-docker build -t dexec/{{image-name}} .
+docker build -t dexec/lang-{{image-name}} .
 ```
 
 # Usage
@@ -16,7 +16,7 @@ In a directory containing a script e.g. foo.{{file-extension}}, run:
 ```sh
 docker run -t --rm \
     -v $(pwd -P)/foo.{{file-extension}}:/tmp/dexec/build/foo.{{file-extension}} \
-    dexec/{{image-name}} foo.{{file-extension}}
+    dexec/lang-{{image-name}} foo.{{file-extension}}
 ```
 
 ## Passing arguments to the script
@@ -34,7 +34,7 @@ Each argument passed must be prefixed in this way, e.g.
 ```sh
 docker run -t --rm \
     -v $(pwd -P)/foo.{{file-extension}}:/tmp/dexec/build/foo.{{file-extension}} \
-    dexec/{{image-name}} foo.{{file-extension}} \
+    dexec/lang-{{image-name}} foo.{{file-extension}} \
     --arg='hello world' \
     --arg=foo \
     --arg=bar
@@ -56,7 +56,7 @@ Each argument passed must be prefixed in this way, e.g.
 ```sh
 docker run -t --rm \
     -v $(pwd -P)/foo.{{file-extension}}:/tmp/dexec/build/foo.{{file-extension}} \
-    dexec/{{image-name}} foo.{{file-extension}} \
+    dexec/lang-{{image-name}} foo.{{file-extension}} \
     --build-arg=-some-compiler-option \
     --build-arg=some-compiler-option-value
 ```
